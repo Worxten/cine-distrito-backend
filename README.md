@@ -1,7 +1,7 @@
 # cine-distrito-backend
 Proyecto backend para gestion de un cine propuesto para la clase de Seminario de Ingenieria de Software de la Universidad Distrital UDFJC
 
-##MySQL configs
+##MySQL config
 Configurar variables de entorno:
 
 ![Alt text](img/1.png?raw=true "1")
@@ -10,10 +10,7 @@ Configurar variables de entorno:
 
 ![Alt text](img/3.png?raw=true "3")
 
-DB_USER = yourusers
-
-DB_PASSWORD = yourpass
-
-DB_HOST = localhost
-
-DB_PORT = 3306
+- DB_USER = youruser
+- DB_PASSWORD = yourpass
+- DB_HOST = localhost
+- DB_PORT = 3306
