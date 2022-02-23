@@ -1,12 +1,10 @@
 package com.udistrital.cinedistritobackend.api.controllers.movie;
 
+import com.udistrital.cinedistritobackend.api.controllers.movie.payloads.MoviePayload;
 import com.udistrital.cinedistritobackend.api.services.movie.usecase.MovieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/movies")
@@ -25,5 +23,10 @@ public class MovieController {
     @GetMapping("/{id}")
     public ResponseEntity getMovie(@PathVariable long id){
         return new ResponseEntity(movieService.getMovie(id), HttpStatus.OK);
+    }
+
+    @PostMapping()
+    public ResponseEntity createMovie(@RequestBody MoviePayload moviePayload){
+        return new ResponseEntity(movieService.createMovie(moviePayload), HttpStatus.OK);
     }
 }

@@ -1,5 +1,6 @@
 package com.udistrital.cinedistritobackend.api.services.movie.dto;
 
+import com.udistrital.cinedistritobackend.api.controllers.movie.payloads.MoviePayload;
 import com.udistrital.cinedistritobackend.api.services.movie.entity.Movie;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,10 +33,28 @@ public class MovieDTO {
                 movie.getClassification());
     }
 
+    public static MovieDTO payloadToDto(MoviePayload movie) {
+        return new MovieDTO(
+                0,
+                movie.getNombre(),
+                movie.isStatus(),
+                movie.getLengthMinutes(),
+                movie.getDirector(),
+                movie.getClassification());
+    }
+
     public static ArrayList<MovieDTO> entitiesToDtos(ArrayList<Movie> movies) {
         ArrayList<MovieDTO> movieDTOS = new ArrayList<>();
         for (Movie movie : movies) {
             movieDTOS.add(MovieDTO.entityToDto(movie));
+        }
+        return movieDTOS;
+    }
+
+    public static ArrayList<MovieDTO> payloadsToDtos(ArrayList<MoviePayload> movies) {
+        ArrayList<MovieDTO> movieDTOS = new ArrayList<>();
+        for (MoviePayload movie : movies) {
+            movieDTOS.add(MovieDTO.payloadToDto(movie));
         }
         return movieDTOS;
     }

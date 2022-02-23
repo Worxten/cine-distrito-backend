@@ -1,4 +1,4 @@
-package com.udistrital.cinedistritobackend.platform.exceptions;
+package com.udistrital.cinedistritobackend.platform.exceptions.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,4 @@
-package com.udistrital.cinedistritobackend.platform.exceptions;
-
-import java.util.Optional;
+package com.udistrital.cinedistritobackend.platform.exceptions.api;
 
 public class InvalidParamsException extends ApiException{
     private static final long serialVersionUID = 1L;

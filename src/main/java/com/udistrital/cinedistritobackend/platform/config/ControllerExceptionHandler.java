@@ -1,8 +1,8 @@
 package com.udistrital.cinedistritobackend.platform.config;
 
-import com.udistrital.cinedistritobackend.platform.exceptions.ApiError;
-import com.udistrital.cinedistritobackend.platform.exceptions.ApiException;
-import com.udistrital.cinedistritobackend.platform.exceptions.InvalidParamsException;
+import com.udistrital.cinedistritobackend.platform.exceptions.api.ApiError;
+import com.udistrital.cinedistritobackend.platform.exceptions.api.ApiException;
+import com.udistrital.cinedistritobackend.platform.exceptions.api.InvalidParamsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
