@@ -20,4 +20,15 @@ public class MovieService {
         ArrayList <Movie> movies = (ArrayList<Movie>) movieRepository.findAll();
         return MovieDTO.entitiesToDtos(movies);
     }
+
+    public MovieDTO getMovie(long id) {
+         Movie movie = movieRepository.findMovieById(id);
+         MovieDTO movieResponse;
+         if (movie == null){
+             movieResponse = new MovieDTO();
+         }else {
+             movieResponse = MovieDTO.entityToDto(movie);
+         }
+        return movieResponse;
+    }
 }

@@ -10,5 +10,6 @@ import java.util.ArrayList;
 public interface IMovieRepository extends JpaRepository<Movie,Long> {
 
     ArrayList<Movie> getAllById(long id);
+    Movie findMovieById(long id);
 
 }
