@@ -4,16 +4,18 @@ import com.udistrital.cinedistritobackend.api.controllers.payloads.UsuarioClient
 import com.udistrital.cinedistritobackend.api.infrastructure.user.repository.IUsuarioRepository;
 import com.udistrital.cinedistritobackend.api.services.user.UsuarioClienteDTO;
 import com.udistrital.cinedistritobackend.api.services.user.entity.UsuarioCliente;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
-public class RegistrarUsuarioUseCase {
+@Qualifier("usa")
+public class UsuarioService {
 
-private final IUsuarioRepository repository;
+private  IUsuarioRepository repository;
 
-public RegistrarUsuarioUseCase (IUsuarioRepository repository){
+public UsuarioService(@Qualifier("repo") IUsuarioRepository repository){
     this.repository = repository;
 }
 

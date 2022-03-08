@@ -1,19 +1,19 @@
 package com.udistrital.cinedistritobackend.api.controllers.user;
 
 import com.udistrital.cinedistritobackend.api.controllers.payloads.UsuarioClientePayload;
-import com.udistrital.cinedistritobackend.api.services.user.usecase.RegistrarUsuarioUseCase;
+import com.udistrital.cinedistritobackend.api.services.user.usecase.UsuarioService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
 
-    private final RegistrarUsuarioUseCase usuarioService;
+    public final UsuarioService usuarioService;
 
-    public UsuarioController (RegistrarUsuarioUseCase usuarioService) {
+    public UsuarioController (@Qualifier("usa") UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
