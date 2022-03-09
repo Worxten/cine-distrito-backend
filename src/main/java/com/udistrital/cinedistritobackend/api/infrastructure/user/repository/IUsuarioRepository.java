@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Qualifier("repo")
 public interface IUsuarioRepository extends JpaRepository<UsuarioCliente, Long>
 {
-    UsuarioCliente nuevoUsuario(UsuarioCliente user);
+
 }
