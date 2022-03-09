@@ -1,6 +1,6 @@
-package com.udistrital.cinedistritobackend.api.services.user.entity;
+package com.udistrital.cinedistritobackend.api.services.user.entities;
 
-import com.udistrital.cinedistritobackend.api.services.user.UsuarioClienteDTO;
+import com.udistrital.cinedistritobackend.api.services.user.dto.UsuarioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +31,7 @@ public class UsuarioCliente {
     @Column
     private int puntos;
 
-    public static UsuarioCliente dtoToEntity(UsuarioClienteDTO userDTO){
+    public static UsuarioCliente dtoToEntity(UsuarioDTO userDTO){
         return new UsuarioCliente(
             userDTO.getId(),
             userDTO.getName(),

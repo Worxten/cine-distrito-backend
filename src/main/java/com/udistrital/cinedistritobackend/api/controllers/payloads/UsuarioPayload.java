@@ -1,8 +1,7 @@
 package com.udistrital.cinedistritobackend.api.controllers.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.udistrital.cinedistritobackend.api.services.user.UsuarioClienteDTO;
-import com.udistrital.cinedistritobackend.api.services.user.entity.UsuarioCliente;
+import com.udistrital.cinedistritobackend.api.services.user.dto.UsuarioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioClientePayload {
+public class UsuarioPayload {
 
     @JsonProperty("nombre")
     private String name;
@@ -25,15 +24,21 @@ public class UsuarioClientePayload {
     private Date fechaNacimiento;
     @JsonProperty("puntos")
     private int puntos;
+    @JsonProperty("tipo")
+    private String tipo;
+    @JsonProperty("cargo")
+    private String cargo;
 
-    public static UsuarioClientePayload dtoToPayload (UsuarioClienteDTO userDTO){
-        return new UsuarioClientePayload(
+    public static UsuarioPayload dtoToPayload (UsuarioDTO userDTO){
+        return new UsuarioPayload(
                 userDTO.getName(),
                 userDTO.getApellido(),
                 userDTO.getNickName(),
                 userDTO.getPassword(),
                 userDTO.getFechaNacimiento(),
-                userDTO.getPuntos());
+                userDTO.getPuntos(),
+                userDTO.getTipo(),
+        userDTO.getCargo());
     }
 
 }
