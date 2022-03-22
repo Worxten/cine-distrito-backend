@@ -1,5 +1,6 @@
 package com.udistrital.cinedistritobackend.api.infrastructure.authentication.security;
 
+import com.udistrital.cinedistritobackend.api.infrastructure.authentication.security.filters.JwtRequestFilter;
 import com.udistrital.cinedistritobackend.api.infrastructure.authentication.security.services.MyUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,9 +25,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyUserDetailsServiceImpl myUserDetailsService;
 
-    /*@Autowired
+    @Autowired
     private JwtRequestFilter jwtRequestFilter;
-*/
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -38,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-       // http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
