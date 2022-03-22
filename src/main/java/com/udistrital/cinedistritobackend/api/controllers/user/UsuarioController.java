@@ -2,6 +2,7 @@ package com.udistrital.cinedistritobackend.api.controllers.user;
 
 import com.udistrital.cinedistritobackend.api.controllers.payloads.UsuarioPayload;
 import com.udistrital.cinedistritobackend.api.services.user.usecase.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/usuario")
 
 public class UsuarioController {
+
 
     public final UsuarioService usuarioService;
 
