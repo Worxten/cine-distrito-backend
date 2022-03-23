@@ -90,8 +90,7 @@ public class UsuarioController {
 
     }
 
-    // Not hard-coded user
-    @RequestMapping(value = "/oauth" , method = RequestMethod.POST)
+    @RequestMapping(value = "/oath" , method = RequestMethod.POST)
     public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
@@ -105,6 +104,7 @@ public class UsuarioController {
                 encoder.encode(signUpRequest.getPassword()));
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
+
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role user is not found."));
@@ -154,7 +154,53 @@ public class UsuarioController {
                 roles));
     }
 
+    // Add 3 types of roles, Cliente = user, admin and empleado
+    // UsuarioPayload must have email field
+    // Not hard-coded user
+    @RequestMapping(value = "/registrar" , method = RequestMethod.POST)
+    public ResponseEntity<?> register(@RequestBody UsuarioPayload payload) {
 
+        if (userRepository.existsByUsername(payload.getNickName())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(("Error: Username is already taken!"));
+        }
+
+        // Create new user's authentication account
+
+        User user = new User(payload.getNickName(),
+                "abc@gmail.com",
+                encoder.encode(payload.getPassword()));
+
+        String strRole = payload.getTipo();
+        Set<Role> roles = new HashSet<>();
+
+        if (strRole !=null) {
+            switch (strRole) {
+                case "user":
+                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    roles.add(userRole);
+                    break;
+                case "admin":
+                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                            .orElseThrow(() -> new RuntimeException("Error: Role adm is not found."));
+                    roles.add(adminRole);
+                    break;
+                default:
+                case "mod":
+                    Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                            .orElseThrow(() -> new RuntimeException("Error: Role mod is not found."));
+                    roles.add(modRole);
+            }
+        }
+            user.setRoles(roles);
+            userRepository.save(user);
+        // Creating user of the application
+        // Put this in try-catch with the user authentication creation process together
+        return new ResponseEntity( (usuarioService.agregarUsuario(payload)),HttpStatus.OK );
+        //return ResponseEntity.ok(("User registered successfully!"));
+    }
     /*@GetMapping("/all")
     public ResponseEntity getAllUsers(){
 

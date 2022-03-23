@@ -31,8 +31,10 @@ public UsuarioService(@Qualifier("repoCliente") IClienteRepository clienteReposi
 public UsuarioDTO agregarUsuario(UsuarioPayload payload){
     UsuarioDTO userDTO= UsuarioDTO.payloadToDto(payload);
 
-    if(userDTO.getTipo().equals("Cliente")){
+    // equals Cliente = user
+    if(userDTO.getTipo().equals("user")){
         //UsuarioCliente user = UsuarioCliente.dtoToEntity(userDTO);
+        userDTO.setTipo("Cliente");
         Cliente cliente = Cliente.dtoToEntity(userDTO);
         clienteRepository.save(cliente);
 
