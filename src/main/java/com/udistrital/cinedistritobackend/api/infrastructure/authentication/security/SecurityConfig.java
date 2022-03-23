@@ -32,10 +32,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 // Configure this part for the controllers !!!!!!!
-                .authorizeRequests().antMatchers("/auth").permitAll().
-                antMatchers("/oath").permitAll().
+                .authorizeRequests().antMatchers("/usuario/**").permitAll().
+                antMatchers("/oauth").permitAll().
                 antMatchers("/signin").permitAll().
-                antMatchers("/api/**").permitAll().
+                //antMatchers("/usuario/**").permitAll().
                 anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
