@@ -21,8 +21,8 @@ public class Empleado extends Usuario{
     private String cargo;
 
 
-    public Empleado(Long id, String name, String apellido, String nickName, String password, Date fechaNacimiento, String tipo,
-                    String cargo) {
+        public Empleado(Long id, String name, String apellido, String nickName, String password, Date fechaNacimiento, String tipo,
+                        String cargo) {
         super(id, name, apellido, nickName, password, fechaNacimiento, tipo);
 this.cargo = cargo;
     }

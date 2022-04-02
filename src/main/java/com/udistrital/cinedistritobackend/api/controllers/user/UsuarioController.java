@@ -12,7 +12,12 @@ import com.udistrital.cinedistritobackend.api.infrastructure.authentication.repo
 import com.udistrital.cinedistritobackend.api.infrastructure.authentication.security.services.MyUserDetailsServiceImpl;
 import com.udistrital.cinedistritobackend.api.infrastructure.authentication.security.services.UserDetailsImpl;
 import com.udistrital.cinedistritobackend.api.infrastructure.authentication.security.utils.JwtUtil;
+import com.udistrital.cinedistritobackend.api.services.user.entities.Cliente;
+import com.udistrital.cinedistritobackend.api.services.user.entities.Empleado;
 import com.udistrital.cinedistritobackend.api.services.user.usecase.UsuarioService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -60,18 +65,22 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
     @GetMapping("/all")
+    @ApiOperation("Endpoint para acceso publico sin token")
     public String allAccess() {
         return "Public Content.";
     }
 
     @GetMapping("/user")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @ApiOperation("Endpoint para acceso a user con token ")
     public String userAccess() {
         return "User Content.";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/allclientes")
+    @ApiOperation("Obtiene la lista de todos los clientes ")
+    @ApiResponses({@ApiResponse(code=201, message="Created", response= Cliente.class)})
     public ResponseEntity getClientes(){
 
         return new ResponseEntity(usuarioService.getClientes(), HttpStatus.OK);
@@ -79,63 +88,17 @@ public class UsuarioController {
 
     @GetMapping("/allempleados")
     @PreAuthorize("hasRole('ADMIN')")
+    @ApiOperation("Obtiene la lista de todos los empleados")
+    @ApiResponses({@ApiResponse(code=201, message="Created", response= Empleado.class)})
     public ResponseEntity getEmpleados(){
 
         return new ResponseEntity(usuarioService.getEmpleados(), HttpStatus.OK);
     }
 
-    @PostMapping("/nuevoUsuario")
-    public ResponseEntity createUser(@RequestBody UsuarioPayload payload){
-        return new ResponseEntity( (usuarioService.agregarUsuario(payload)),HttpStatus.OK );
-
-    }
-
-    @RequestMapping(value = "/oath" , method = RequestMethod.POST)
-    public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(("Error: Username is already taken!"));
-        }
-
-        // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                "abc@gmail.com",
-                encoder.encode(signUpRequest.getPassword()));
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role user is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role adm is not found."));
-                        roles.add(adminRole);
-                        break;
-                    case "mod":
-                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role mod is not found."));
-                        roles.add(modRole);
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
-        }
-        user.setRoles(roles);
-        userRepository.save(user);
-        return ResponseEntity.ok(("User registered successfully!"));
-    }
-
     // Giving the non hard-coded user a token
     @PostMapping("/signin")
+    @ApiOperation("Iniciar sesion y obtiene Token")
+    @ApiResponses({@ApiResponse(code=201, message="Created", response=JwtTokenResponse.class)})
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -158,6 +121,8 @@ public class UsuarioController {
     // UsuarioPayload must have email field
     // Not hard-coded user
     @RequestMapping(value = "/registrar" , method = RequestMethod.POST)
+    @ApiOperation("Registrar un usuario en la App")
+    @ApiResponses({@ApiResponse(code=201, message="Created", response=UsuarioPayload.class)})
     public ResponseEntity<?> register(@RequestBody UsuarioPayload payload) {
 
         if (userRepository.existsByUsername(payload.getNickName())) {
@@ -200,6 +165,59 @@ public class UsuarioController {
         // Put this in try-catch with the user authentication creation process together
         return new ResponseEntity( (usuarioService.agregarUsuario(payload)),HttpStatus.OK );
         //return ResponseEntity.ok(("User registered successfully!"));
+    }
+
+    @PostMapping("/nuevoUsuario")
+    @ApiOperation("Deprecated")
+    public ResponseEntity createUser(@RequestBody UsuarioPayload payload){
+        return new ResponseEntity( (usuarioService.agregarUsuario(payload)),HttpStatus.OK );
+
+    }
+
+    // Hard-coded user
+    @RequestMapping(value = "/oath" , method = RequestMethod.POST)
+    @ApiOperation("Deprecated")
+    public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(("Error: Username is already taken!"));
+        }
+
+        // Create new user's account
+        User user = new User(signUpRequest.getUsername(),
+                "abc@gmail.com",
+                encoder.encode(signUpRequest.getPassword()));
+        Set<String> strRoles = signUpRequest.getRole();
+        Set<Role> roles = new HashSet<>();
+
+        if (strRoles == null) {
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role user is not found."));
+            roles.add(userRole);
+        } else {
+            strRoles.forEach(role -> {
+                switch (role) {
+                    case "admin":
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Role adm is not found."));
+                        roles.add(adminRole);
+                        break;
+                    case "mod":
+                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                                .orElseThrow(() -> new RuntimeException("Error: Role mod is not found."));
+                        roles.add(modRole);
+                        break;
+                    default:
+                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(userRole);
+                }
+            });
+        }
+        user.setRoles(roles);
+        userRepository.save(user);
+        return ResponseEntity.ok(("User registered successfully!"));
     }
     /*@GetMapping("/all")
     public ResponseEntity getAllUsers(){
